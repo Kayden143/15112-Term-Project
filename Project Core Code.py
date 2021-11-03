@@ -6,5 +6,3 @@
 import math
 import random as rm
 import cmu_112_graphics
-
-#Test Hi
