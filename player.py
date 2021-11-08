@@ -9,6 +9,7 @@ from enemy import *
 
 class Player():
     def __init__ (self):
+        self.maxHealth = 20
         self.health = 20
         self.x = 0
         self.y = 0
@@ -42,8 +43,11 @@ def keyPressed(app, event):
     if event.key == "Down":
         updatePlayerLocation(app, False, False, True, False)
 
+def isLegalMove(app, x, y):
+    if tuple([x, y]) in app.wallList:
+        return False
+
 def updatePlayerLocation(app, left, right, down, up):
-    app.playerTurn, app.enemyTurn = False, True
     newX = app.p1.x
     newY = app.p1.y
     if left:
@@ -60,9 +64,13 @@ def updatePlayerLocation(app, left, right, down, up):
         if nTile.health <= 0:
             print(nTile)
             app.enemies.remove(nTile)
+            app.playerTurn, app.enemyTurn = False, True
+    elif isLegalMove(app, newX, newY) == False:
+        app.playerTurn = True
     else:
         app.p1.x = newX
         app.p1.y = newY
+        app.playerTurn, app.enemyTurn = False, True
 
 def fight(app, x, y):
     for enemy in app.enemies:

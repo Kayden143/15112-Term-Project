@@ -13,6 +13,7 @@ from player import *
 from dunegon import *
 
 def appStarted(app):
+    app.wallList = set()
     app.gameOver = False
     app.turnCounter = 0
     app.playerTurn = True
@@ -24,6 +25,7 @@ def appStarted(app):
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
 
 def timerFired(app):
+    createRoom(app, 5, 5, 5, 5)
     if app.gameOver:
         return
     if app.enemyTurn:
@@ -43,5 +45,6 @@ def redrawAll(app, canvas):
     drawDungeon(app, canvas)
     drawPlayer(app, canvas)
     drawEnemies(app, canvas)
+    drawHealthBar(app, canvas)
 
-runApp(width = 800, height = 800)
+runApp(width = 400, height = 400)
