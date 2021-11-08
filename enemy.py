@@ -15,14 +15,6 @@ class Rat():
     def __repr__(self):
         return(f'{self.x, self.y, self.health}' + "rat")
 
-    # def __eq__(self, other):
-    #     if self.x == other.x and self.y == other.y:
-    #         return True
-    #     return False
-    
-    # def __hash__(self):
-    #     return id(self)
-
 def keyPressed(app, event):
     if event.key == "e":
         print("hello")
