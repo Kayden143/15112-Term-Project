@@ -29,7 +29,10 @@ def keyPressed(app, event):
         return
     app.playerTurn = False
     if event.key == "h":
+        app.playerTurn = True
         app.p1.health += 30
+        app.playerTurn, app.enemyTurn = False, True
+        updatePlayerLocation(app, False, False, False, False)
     if event.key == "w":
         app.playerTurn, app.enemyTurn = False, True
         updatePlayerLocation(app, False, False, False, False)
