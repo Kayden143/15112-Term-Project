@@ -25,10 +25,14 @@ class Player():
         return id(self)
 
 def keyPressed(app, event):
-    if app.gameOver:
+    if app.gameOver or not app.playerTurn:
         return
+    app.playerTurn = False
     if event.key == "h":
         app.p1.health += 30
+    if event.key == "w":
+        app.playerTurn, app.enemyTurn = False, True
+        updatePlayerLocation(app, False, False, False, False)
     if event.key == "Right":
         app.playerTurn, app.enemyTurn = False, True
         updatePlayerLocation(app, False, True, False, False)

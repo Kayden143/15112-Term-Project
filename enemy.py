@@ -7,13 +7,10 @@ from player import *
 
 class Rat():
     def __init__(self, x, y):
-        self.health = 25
+        self.health = 5
         self.damage = 2
         self.x = x
         self.y = y
-
-    def attack(self):
-        pass
 
     def __repr__(self):
         return(f'{self.x, self.y, self.health}' + "rat")
