@@ -31,25 +31,19 @@ def keyPressed(app, event):
     if event.key == "h":
         app.playerTurn = True
         app.p1.health += 30
-        app.playerTurn, app.enemyTurn = False, True
-        updatePlayerLocation(app, False, False, False, False)
     if event.key == "w":
-        app.playerTurn, app.enemyTurn = False, True
         updatePlayerLocation(app, False, False, False, False)
     if event.key == "Right":
-        app.playerTurn, app.enemyTurn = False, True
         updatePlayerLocation(app, False, True, False, False)
     if event.key == "Left":
-        app.playerTurn, app.enemyTurn = False, True
         updatePlayerLocation(app, True, False, False, False)
     if event.key == "Up":
-        app.playerTurn, app.enemyTurn = False, True
         updatePlayerLocation(app, False, False, False, True)
     if event.key == "Down":
-        app.playerTurn, app.enemyTurn = False, True
         updatePlayerLocation(app, False, False, True, False)
 
 def updatePlayerLocation(app, left, right, down, up):
+    app.playerTurn, app.enemyTurn = False, True
     newX = app.p1.x
     newY = app.p1.y
     if left:
