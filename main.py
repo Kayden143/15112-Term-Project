@@ -11,8 +11,13 @@ from PIL import Image
 from enemy import *
 from player import *
 from dunegon import *
+from items import *
 
 def appStarted(app):
+    app.potionList = dict()
+    health = healthPotion()
+    app.potionList["health"] = health
+    print(app.potionList)
     app.wallList = set()
     app.gameOver = False
     app.turnCounter = 0
@@ -20,12 +25,13 @@ def appStarted(app):
     app.enemyTurn = False
     app.size = 20
     app.p1 = Player()
-    app.enemies = {Rat(10, 10)}
+    app.enemies = {Rat(25, 25)}
     app.enemyLocs = set()
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
 
 def timerFired(app):
-    createRoom(app, 5, 5, 5, 5)
+    createRoom(app, 8, 6, 13, 5)
+    createRoom(app, 10, 10, 12, 12)
     if app.gameOver:
         return
     if app.enemyTurn:
@@ -47,4 +53,4 @@ def redrawAll(app, canvas):
     drawEnemies(app, canvas)
     drawHealthBar(app, canvas)
 
-runApp(width = 400, height = 400)
+runApp(width = 600, height = 600)

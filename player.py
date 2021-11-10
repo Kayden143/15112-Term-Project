@@ -4,13 +4,14 @@ from cmu_112_graphics import *
 import sys
 from PIL import Image
 from enemy import *
+from items import *
 
 
 
 class Player():
     def __init__ (self):
-        self.maxHealth = 20
-        self.health = 20
+        self.maxHealth = 500
+        self.health = 500
         self.x = 0
         self.y = 0
     
@@ -31,7 +32,8 @@ def keyPressed(app, event):
     app.playerTurn = False
     if event.key == "h":
         app.playerTurn = True
-        app.p1.health += 30
+        if "health" in app.potionList:
+            app.potionList["health"].drink(app)
     if event.key == "w":
         updatePlayerLocation(app, False, False, False, False)
     if event.key == "Right":

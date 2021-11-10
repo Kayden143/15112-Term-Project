@@ -21,27 +21,8 @@ def keyPressed(app, event):
         print("hello")
         #createEnemy(app)
 
-def findBestPath(app, px, py, dx, dy, path):
-    print(app.p1.x, app.p1.y, path[-1][0] + dx, path[-1][1] + dy)
-    sleep(0.1)
-    print(path)
-    if app.bestPath == True:
-        return
-    if path == None:
-        path = []
-    if path[-1][0] == app.p1.x and path[-1][1] == app.p1.y:
-        app.bestPath = True
-        return path
-    elif px + dx < 0 or px >= len(app.grid) or py < 0 or py >= len(app.grid) or tuple([px + dx, py + dy]) in path:
-        return None
-    else:
-        for nextCoor in [(-1, 0), (0,-1), (1, 0), (0, 1)]:
-            path.append(tuple([px + nextCoor[0], py + nextCoor[1]]))
-            solution = findBestPath(app, path[-1][0], path[-1][1], nextCoor[0], nextCoor[1], path)
-            if solution != None:
-                app.bestPath = True
-                return solution
-            path.pop()
+def distance(x1, y1, x2, y2):
+    return math.sqrt((y2 - y1)**2 + (x2 - x1)**2)
 
 def findNearestHole(app, x, y, side, nMove):
     prevX, prevY = x, y
@@ -55,12 +36,7 @@ def findNearestHole(app, x, y, side, nMove):
         while tuple([x + nMove, y]) in app.wallList or tuple([x + nMove, y]) in app.enemyLocs:
             y -= 1
             upOrRight += 1
-        if upOrRight == downOrLeft:
-            if abs(app.p1.y - abs(prevY + downOrLeft)) > abs(app.p1.y - abs(prevY - upOrRight)):
-                return -1
-            else:
-                return 1
-        if downOrLeft > upOrRight:
+        if distance(x + nMove, prevY + downOrLeft, app.p1.x, app.p1.y) > distance(x + nMove, prevY + upOrRight, app.p1.x, app.p1.y):
             return -1
         else:
             return 1
@@ -72,12 +48,7 @@ def findNearestHole(app, x, y, side, nMove):
         while tuple([x, y + nMove]) in app.wallList or tuple([x, y + nMove]) in app.enemyLocs:
             x -= 1
             downOrLeft += 1
-        if downOrLeft == upOrRight:
-            if abs(app.p1.x - abs(prevX + downOrLeft)) > abs(app.p1.x - abs(prevX - upOrRight)):
-                return 1
-            else:
-                return -1
-        if downOrLeft > upOrRight:
+        if distance(prevX - downOrLeft, y + nMove, app.p1.x, app.p1.y) > distance(prevX + upOrRight, y + nMove, app.p1.x, app.p1.y):
             return 1
         else:
             return -1
@@ -122,17 +93,19 @@ def moveEnemy(app):
                 else:
                     newX = findNearestHole(app, enemy.x, enemy.y, False, newY)
                     newY = 0
-                enemy.x += newX
-                enemy.y += newY
-                app.enemyLocs.add(tuple([enemy.x, enemy.y]))
-                try:
-                    app.enemyLocs.remove(tuple([enemy.x - newX, enemy.y - newY]))
-                except:
-                    return
+                if (tuple([enemy.x + newX, enemy.y + newY]) not in app.enemyLocs and 
+            tuple([enemy.x + newX, enemy.y + newY]) not in app.wallList):
+                    enemy.x += newX
+                    enemy.y += newY
+                    app.enemyLocs.add(tuple([enemy.x, enemy.y]))
+                    try:
+                        app.enemyLocs.remove(tuple([enemy.x - newX, enemy.y - newY]))
+                    except:
+                        return
 
 def createEnemy(app):
     if app.turnCounter % 10 == 0 and app.turnCounter != 0:
-        app.enemies.add(Rat(10, 10))
+        app.enemies.add(Rat(25, 25))
 
 def kill(app, enemy):
     if enemy.health <= 0:
