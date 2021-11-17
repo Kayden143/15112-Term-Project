@@ -3,10 +3,10 @@ import random as rm
 from cmu_112_graphics import *
 import sys
 from PIL import Image
-from player import *
 from time import sleep
 
-class Rat():
+
+class Enemy():
     def __init__(self, x, y):
         self.health = 5
         self.damage = 2
@@ -14,12 +14,7 @@ class Rat():
         self.y = y
 
     def __repr__(self):
-        return(f'{self.x, self.y, self.health}' + "rat")
-
-def keyPressed(app, event):
-    if event.key == "e":
-        print("hello")
-        #createEnemy(app)
+        return(f'{self.x, self.y, self.health}' + "enemy")
 
 def distance(x1, y1, x2, y2):
     return math.sqrt((y2 - y1)**2 + (x2 - x1)**2)
@@ -36,7 +31,7 @@ def findNearestHole(app, x, y, side, nMove):
         while tuple([x + nMove, y]) in app.wallList or tuple([x + nMove, y]) in app.enemyLocs:
             y -= 1
             upOrRight += 1
-        if distance(x + nMove, prevY + downOrLeft, app.p1.x, app.p1.y) > distance(x + nMove, prevY + upOrRight, app.p1.x, app.p1.y):
+        if distance(x + nMove, prevY + downOrLeft, app.p1.x, app.p1.y) > distance(x + nMove, prevY - upOrRight, app.p1.x, app.p1.y):
             return -1
         else:
             return 1
@@ -105,7 +100,7 @@ def moveEnemy(app):
 
 def createEnemy(app):
     if app.turnCounter % 10 == 0 and app.turnCounter != 0:
-        app.enemies.add(Rat(25, 25))
+        app.enemies.add(Enemy(25, 25))
 
 def kill(app, enemy):
     if enemy.health <= 0:

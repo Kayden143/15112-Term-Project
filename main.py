@@ -3,17 +3,34 @@
 # Author: Kayden Moreno
 # AndrewID: kmoreno
 
+import tkinter as tk
 import math
 import random as rm
 from cmu_112_graphics import *
 import sys
-from PIL import Image
+from PIL import Image, ImageTk
 from enemy import *
+from pauseMenu import *
 from player import *
-from dunegon import *
+from dungeon import *
 from items import *
+from introPage import *
+from controllers import *
 
 def appStarted(app):
+    app.menuMargin = app.width // 4
+    app.pauseMargin = app.menuMargin // 3
+    app.pause = False
+    app.helpColor, app.startColor, app.creditColor, app.pauseHelpColor, app.pauseQuitColor, app.pauseBackColor = ("gray" for i in range(6))
+    app.buttonMargin = app.height // 6
+    app.currPage = "intro"
+    app.buttonWidth = app.width // 12
+    app.buttonHeight = app.height // 40
+    app.titleImg = Image.open("Images\TP Title Image.jfif")
+    app.titleImg = app.titleImg.resize((app.width, app.height))
+    app.titleImg = ImageTk.PhotoImage(app.titleImg)
+    app.startX = app.width // 2
+    app.startY = app.height // 2
     app.potionList = dict()
     health = healthPotion()
     app.potionList["health"] = health
@@ -25,11 +42,13 @@ def appStarted(app):
     app.enemyTurn = False
     app.size = 20
     app.p1 = Player()
-    app.enemies = {Rat(25, 25)}
+    app.enemies = {Enemy(25, 25)}
     app.enemyLocs = set()
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
 
 def timerFired(app):
+    if app.currPage != "game" or app.pause:
+        return
     createRoom(app, 8, 6, 13, 5)
     createRoom(app, 10, 10, 12, 12)
     if app.gameOver:
@@ -44,13 +63,27 @@ def timerFired(app):
         app.turnCounter += 1
         createEnemy(app)
 
+def displayCurrentPage(app, canvas):
+    if app.currPage == "intro":
+        drawBackground(app, canvas)
+        drawIntroButtons(app, canvas)
+    elif app.currPage == "game":
+        if app.gameOver:
+            canvas.create_text(app.width // 2, app.height // 2, text = "GAME OVER", anchor = "center")
+            if app.pause:
+                drawPauseMenu(app, canvas)
+                drawPauseButtons(app, canvas)
+            return
+        drawDungeon(app, canvas)
+        drawPlayer(app, canvas)
+        drawEnemies(app, canvas)
+        drawHealthBar(app, canvas)
+        if app.pause:
+            drawPauseMenu(app, canvas)
+            drawPauseButtons(app, canvas)
+
 def redrawAll(app, canvas):
-    if app.gameOver:
-        canvas.create_text(app.width // 2, app.height // 2, text = "GAME OVER", anchor = "center")
-        return
-    drawDungeon(app, canvas)
-    drawPlayer(app, canvas)
-    drawEnemies(app, canvas)
-    drawHealthBar(app, canvas)
+    displayCurrentPage(app, canvas)
+
 
 runApp(width = 600, height = 600)

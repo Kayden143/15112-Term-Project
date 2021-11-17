@@ -3,7 +3,6 @@ import random as rm
 from cmu_112_graphics import *
 import sys
 from PIL import Image
-from player import *
 
 
 
@@ -17,7 +16,6 @@ def createRoom(app, l, w, x, y):
 def drawHealthBar(app, canvas):
     canvas.create_rectangle(app.size, app.size, 8 * app.size, app.size * 2, fill = "red")
     canvas.create_rectangle(app.size, app.size, 8 * app.size * (app.p1.health / app.p1.maxHealth), app.size * 2, fill = "yellow")
-
 
 def drawDungeon(app, canvas):
     for row in range(len(app.grid)):

@@ -10,8 +10,8 @@ from items import *
 
 class Player():
     def __init__ (self):
-        self.maxHealth = 500
-        self.health = 500
+        self.maxHealth = 40
+        self.health = 40
         self.x = 0
         self.y = 0
     
@@ -25,25 +25,6 @@ class Player():
     
     def __hash__(self):
         return id(self)
-
-def keyPressed(app, event):
-    if app.gameOver or not app.playerTurn:
-        return
-    app.playerTurn = False
-    if event.key == "h":
-        app.playerTurn = True
-        if "health" in app.potionList:
-            app.potionList["health"].drink(app)
-    if event.key == "w":
-        updatePlayerLocation(app, False, False, False, False)
-    if event.key == "Right":
-        updatePlayerLocation(app, False, True, False, False)
-    if event.key == "Left":
-        updatePlayerLocation(app, True, False, False, False)
-    if event.key == "Up":
-        updatePlayerLocation(app, False, False, False, True)
-    if event.key == "Down":
-        updatePlayerLocation(app, False, False, True, False)
 
 def isLegalMove(app, x, y):
     if tuple([x, y]) in app.wallList:
