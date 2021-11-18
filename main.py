@@ -18,6 +18,12 @@ from introPage import *
 from controllers import *
 
 def appStarted(app):
+    app.newCon = True
+    app.connectCounter = 0
+    app.connectedCells = dict()
+    app.connections = set()
+    app.maxRoomSize = 10
+    app.numRooms = 6
     app.menuMargin = app.width // 4
     app.pauseMargin = app.menuMargin // 3
     app.pause = False
@@ -29,8 +35,6 @@ def appStarted(app):
     app.titleImg = Image.open("Images\TP Title Image.jfif")
     app.titleImg = app.titleImg.resize((app.width, app.height))
     app.titleImg = ImageTk.PhotoImage(app.titleImg)
-    app.startX = app.width // 2
-    app.startY = app.height // 2
     app.potionList = dict()
     health = healthPotion()
     app.potionList["health"] = health
@@ -45,8 +49,13 @@ def appStarted(app):
     app.enemies = {Enemy(25, 25)}
     app.enemyLocs = set()
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
+    app.roomList, app.openSquares = createDungeon(app)
+    connectRooms(app)
+    print("running")
 
 def timerFired(app):
+    if app.currPage == "credit":
+        app.newCon = False
     if app.currPage != "game" or app.pause:
         return
     createRoom(app, 8, 6, 13, 5)
@@ -81,6 +90,9 @@ def displayCurrentPage(app, canvas):
         if app.pause:
             drawPauseMenu(app, canvas)
             drawPauseButtons(app, canvas)
+    elif app.currPage == "credit":
+        drawRooms(app, canvas)
+        drawConnections(app, canvas)
 
 def redrawAll(app, canvas):
     displayCurrentPage(app, canvas)

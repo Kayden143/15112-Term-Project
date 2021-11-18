@@ -13,44 +13,45 @@ from introPage import *
 
 def mousePressed(app, event):
     if app.currPage == "intro":
-        if event.x >= app.startX - app.buttonWidth and event.x <= app.startX + app.buttonWidth:
-            if event.y >= app.startY - app.buttonHeight and event.y <= app.startY + app.buttonHeight:
+        if event.x >= app.width // 2 - app.buttonWidth and event.x <= app.width // 2 + app.buttonWidth:
+            if event.y >= app.height // 2 - app.buttonHeight and event.y <= app.height // 2 + app.buttonHeight:
                 print("Help selected")
-            elif event.y >= app.startY - app.buttonHeight + app.buttonMargin and event.y <= app.startY + app.buttonHeight + app.buttonMargin:
+            elif event.y >= app.height // 2 - app.buttonHeight + app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight + app.buttonMargin:
                 print("Credit selected")
-            elif event.y >= app.startY - app.buttonHeight - app.buttonMargin and event.y <= app.startY + app.buttonHeight - app.buttonMargin:
+                app.currPage = "credit"
+            elif event.y >= app.height // 2 - app.buttonHeight - app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight - app.buttonMargin:
                 app.currPage = "game"
                 app.pause = False
     elif app.currPage == "game" and app.pause:
-        if event.x >= app.startX - app.buttonWidth and event.x <= app.startX + app.buttonWidth:
-            if event.y >= app.startY - app.buttonHeight and event.y <= app.startY + app.buttonHeight:
+        if event.x >= app.width // 2 - app.buttonWidth and event.x <= app.width // 2 + app.buttonWidth:
+            if event.y >= app.height // 2 - app.buttonHeight and event.y <= app.height // 2 + app.buttonHeight:
                 print("Pause Help Selected")
-            elif event.y >= app.startY - app.buttonHeight + app.buttonMargin and event.y <= app.startY + app.buttonHeight + app.buttonMargin:
+            elif event.y >= app.height // 2 - app.buttonHeight + app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight + app.buttonMargin:
                 app.pause = False
                 app.currPage = "intro"
-            elif event.y >= app.startY - app.buttonHeight - app.buttonMargin and event.y <= app.startY + app.buttonHeight - app.buttonMargin:
+            elif event.y >= app.height // 2 - app.buttonHeight - app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight - app.buttonMargin:
                 app.pause = False
 
 def mouseMoved(app, event):
     if app.currPage == "intro":
-        if event.x >= app.startX - app.buttonWidth and event.x <= app.startX + app.buttonWidth:
-            if event.y >= app.startY - app.buttonHeight and event.y <= app.startY + app.buttonHeight:
+        if event.x >= app.width // 2 - app.buttonWidth and event.x <= app.width // 2 + app.buttonWidth:
+            if event.y >= app.height // 2 - app.buttonHeight and event.y <= app.height // 2 + app.buttonHeight:
                 app.helpColor = "red"
-            elif event.y >= app.startY - app.buttonHeight + app.buttonMargin and event.y <= app.startY + app.buttonHeight + app.buttonMargin:
+            elif event.y >= app.height // 2 - app.buttonHeight + app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight + app.buttonMargin:
                 app.creditColor = "red"
-            elif event.y >= app.startY - app.buttonHeight - app.buttonMargin and event.y <= app.startY + app.buttonHeight - app.buttonMargin:
+            elif event.y >= app.height // 2 - app.buttonHeight - app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight - app.buttonMargin:
                 app.startColor = "red"
             else:
                 app.helpColor, app.startColor, app.creditColor = "gray", "gray", "gray"
         else:
             app.helpColor, app.startColor, app.creditColor = "gray", "gray", "gray"
     elif app.currPage == "game" and app.pause:
-        if event.x >= app.startX - app.buttonWidth and event.x <= app.startX + app.buttonWidth:
-            if event.y >= app.startY - app.buttonHeight and event.y <= app.startY + app.buttonHeight:
+        if event.x >= app.width // 2 - app.buttonWidth and event.x <= app.width // 2 + app.buttonWidth:
+            if event.y >= app.height // 2 - app.buttonHeight and event.y <= app.height // 2 + app.buttonHeight:
                 app.pauseHelpColor = "red"
-            elif event.y >= app.startY - app.buttonHeight + app.buttonMargin and event.y <= app.startY + app.buttonHeight + app.buttonMargin:
+            elif event.y >= app.height // 2 - app.buttonHeight + app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight + app.buttonMargin:
                 app.pauseQuitColor = "red"
-            elif event.y >= app.startY - app.buttonHeight - app.buttonMargin and event.y <= app.startY + app.buttonHeight - app.buttonMargin:
+            elif event.y >= app.height // 2 - app.buttonHeight - app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight - app.buttonMargin:
                 app.pauseBackColor = "red"
             else:
                 app.pauseHelpColor, app.pauseQuitColor, app.pauseBackColor = "gray", "gray", "gray"

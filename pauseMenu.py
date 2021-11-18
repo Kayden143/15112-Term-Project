@@ -6,21 +6,21 @@ import sys
 from PIL import Image, ImageTk
 
 def drawPauseMenu(app, canvas):
-    canvas.create_rectangle(app.startX - app.menuMargin, app.startY - app.menuMargin, app.startX + app.menuMargin, 
-    app.startY + app.menuMargin, fill = "green")
+    canvas.create_rectangle(app.width // 2 - app.menuMargin, app.height // 2 - app.menuMargin, app.width // 2 + app.menuMargin, 
+    app.height // 2 + app.menuMargin, fill = "green")
 
 def drawPauseButtons(app, canvas):
-    canvas.create_rectangle(app.startX - app.buttonWidth, app.startY - app.buttonHeight, 
-    app.startX + app.buttonWidth, app.startY + app.buttonHeight, fill = app.pauseHelpColor)
+    canvas.create_rectangle(app.width // 2 - app.buttonWidth, app.height // 2 - app.buttonHeight, 
+    app.width // 2 + app.buttonWidth, app.height // 2 + app.buttonHeight, fill = app.pauseHelpColor)
 
-    canvas.create_text(app.startX, app.startY, text = "Help", anchor = "center", font = str(app.height // 40))
+    canvas.create_text(app.width // 2, app.height // 2, text = "Help", anchor = "center", font = str(app.height // 40))
 
-    canvas.create_rectangle(app.startX - app.buttonWidth, app.startY - app.buttonHeight + app.buttonMargin, 
-    app.startX + app.buttonWidth, app.startY + app.buttonHeight + app.buttonMargin, fill = app.pauseQuitColor)
+    canvas.create_rectangle(app.width // 2 - app.buttonWidth, app.height // 2 - app.buttonHeight + app.buttonMargin, 
+    app.width // 2 + app.buttonWidth, app.height // 2 + app.buttonHeight + app.buttonMargin, fill = app.pauseQuitColor)
 
-    canvas.create_text(app.startX, app.startY + app.buttonMargin, text = "Quit", anchor = "center", font = str(app.height // 40))
+    canvas.create_text(app.width // 2, app.height // 2 + app.buttonMargin, text = "Quit", anchor = "center", font = str(app.height // 40))
 
-    canvas.create_rectangle(app.startX - app.buttonWidth, app.startY - app.buttonHeight - app.buttonMargin, 
-    app.startX + app.buttonWidth, app.startY + app.buttonHeight - app.buttonMargin, fill = app.pauseBackColor)
+    canvas.create_rectangle(app.width // 2 - app.buttonWidth, app.height // 2 - app.buttonHeight - app.buttonMargin, 
+    app.width // 2 + app.buttonWidth, app.height // 2 + app.buttonHeight - app.buttonMargin, fill = app.pauseBackColor)
 
-    canvas.create_text(app.startX, app.startY - app.buttonMargin, text = "Back", anchor = "center", font = str(app.height // 40))
+    canvas.create_text(app.width // 2, app.height // 2 - app.buttonMargin, text = "Back", anchor = "center", font = str(app.height // 40))
