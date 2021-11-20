@@ -33,22 +33,6 @@ def createDungeon(app):
         roomLen = rm.randint(app.maxRoomSize * 0.8, app.maxRoomSize)
         roomStartH = rm.randint(0, app.maxRoomSize * 0.4)
         roomHt = rm.randint(app.maxRoomSize * 0.8, app.maxRoomSize)
-        #print(roomStartH, roomHt, roomStartL, roomLen)
-        # Get walls of the room
-        # for l in range(roomLen - roomStartL):
-        #     i[roomStartL + l + app.maxRoomSize * roomStartH] = "#"
-        #     i[roomStartL + l + app.maxRoomSize * roomHt - app.maxRoomSize] = "#"
-        # for h in range(roomHt - roomStartH):
-        #     i[app.maxRoomSize * (roomStartH + h) + roomStartL] = "#"
-        #     i[app.maxRoomSize * (roomStartH + h) + roomLen - 1] = "#"
-
-
-        # draw all walls at once
-        # for l in range(roomLen - roomStartL):
-        #     for h in range(roomHt - roomStartH):
-        #         i[roomStartL + l + app.maxRoomSize * (roomStartH + h)] = "#"
-
-        # Draw Room
         for l in range(1, roomLen - roomStartL - 1):
             for h in range(1, roomHt - roomStartH - 1):
                 i[roomStartL + l + app.maxRoomSize * (roomStartH + h)] = "."
@@ -58,12 +42,6 @@ def createDungeon(app):
                     openSquares[roomNum] = {roomStartL + l + app.maxRoomSize * (roomStartH + h)}
         roomList[roomNum] = i
         roomNum += 1
-    for room in roomList:
-        count = 0
-        for row in range(app.maxRoomSize):
-            print(roomList[room][count:count + app.maxRoomSize])
-            count += app.maxRoomSize
-        print("-------------------------")
     return roomList, openSquares
 
 def connectRooms(app):
@@ -72,28 +50,20 @@ def connectRooms(app):
         app.connectedCells[room] = {room}
     while len(app.connectedCells) > 1:
         breakLoop = False
-        # print(app.connectedCells)
-        # print(app.connections)
         currCell = rm.sample(sorted(app.connectedCells), 1)
         currCellNum = currCell[0]
         currCell = app.connectedCells[currCell[0]]
-        #print(currCell)
         currRoom = rm.sample(currCell, 1)[0]
         randValues = [currRoom + 1, currRoom - 1, currRoom + app.numRooms, currRoom - app.numRooms]
         for val in randValues:
             if (val < 0 or val > app.numRooms**2 or val in currCell or tuple([currRoom, val]) in app.connections or 
             tuple([val, currRoom]) in app.connections or abs(currRoom % app.numRooms - val % app.numRooms) == app.numRooms - 1):
-                # print(currRoom, val)
-                # print(app.connections)
                 randValues.remove(val)
-        # print(currRoom)
-        # print(randValues)
         while len(randValues) != 0:
             cRoom = rm.randint(0, len(randValues) - 1)
             for cell in app.connectedCells:
                 if randValues[cRoom] in app.connectedCells[cell] :
                     app.connections.add(tuple([currRoom, randValues[cRoom]]))
-                    # print(currCell, cell)
                     app.connectedCells[currCellNum] = app.connectedCells[currCellNum].union(app.connectedCells[cell])
                     app.connectedCells.pop(cell)
                     breakLoop = True
@@ -109,19 +79,16 @@ def connectRooms(app):
         (con[1], con[0]) in app.connections):
             fail = True
             break
-    if len(app.connections) < app.numRooms**2 - 1 or fail:
+    if len(app.connections) < app.numRooms**2 - 3 or fail:
         app.connections = set()
         app.connectCounter = 0
         fail = False
         connectRooms(app)
-    else:
-        print(app.connections)
 
 def delRooms(app, starRoom = None):
     if starRoom == None:
         starRoom = rm.randint(0, app.numRooms**2 - 1)
     if starRoom in app.conRooms:
-        print(app.connections)
         return
     else:
         app.conRooms.add(starRoom)
@@ -138,9 +105,7 @@ def removeConns(app):
     app.connections = copy.deepcopy(app.connectionsNotToRemove)
     app.openSquares = copy.deepcopy(app.openSquaresNotToRemove)
 
-
-
-def drawConnections(app, canvas):
+def createConnCoords(app):
     for con in app.connections:
         conDir = abs(con[1] - con[0])
         while True:
@@ -151,30 +116,26 @@ def drawConnections(app, canvas):
             tileX = conTile % app.maxRoomSize
             tileY = conTile // app.maxRoomSize
             for i in range(conTile % app.maxRoomSize + app.maxRoomSize - conTile % app.maxRoomSize):
-                canvas.create_rectangle(app.size * (tileX + i + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
-            app.size * (tileY + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms)), 
-            app.size * (tileX + 1 + i + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
-            app.size * (tileY + 1 + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms)), fill = "green")
+                app.connectionsToDraw.append(tuple([app.size * (tileX + i + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
+                app.size * (tileY + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms)), 
+                app.size * (tileX + 1 + i + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
+                app.size * (tileY + 1 + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms))]))
         else:
             tileX = conTile % app.maxRoomSize
             tileY = conTile // app.maxRoomSize
             for i in range(conTile % app.maxRoomSize + app.maxRoomSize - conTile % app.maxRoomSize):
-                canvas.create_rectangle(app.size * (tileX + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
-            app.size * (tileY + i + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms)), 
-            app.size * (tileX + 1 + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
-            app.size * (tileY + 1 + i + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms)), fill = "green")
-        
+                app.connectionsToDraw.append(tuple([app.size * (tileX + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
+                app.size * (tileY + i + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms)), 
+                app.size * (tileX + 1 + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
+                app.size * (tileY + 1 + i + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms))]))
 
+def drawConnections(app, canvas):
+    for tile in app.connectionsToDraw:
+        canvas.create_rectangle(tile[0], tile[1], tile[2], tile[3], fill = "orange")
 
 def drawRooms(app, canvas):
     tileNumX = 0
     tileNumY = 0
-    # for i in range(app.maxRoomSize):
-    #     for j in range(app.maxRoomSize):
-    #         canvas.create_rectangle(app.size * i, app.size * j, 
-    #     app.size * (i + 1), app.size * (j + 1), fill = "gray")
-    #         canvas.create_rectangle(app.size * (i + 10), app.size * j, 
-    #         app.size * (i + 11), app.size * (j + 1), fill = "gray")
     for open in app.openSquares:
         for tile in app.openSquares[open]:
             tileNumX = tile % app.maxRoomSize

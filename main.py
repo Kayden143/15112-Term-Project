@@ -1,4 +1,4 @@
-# Project Core Code
+# Project Main Code
 # Date Initialized: 11/2/21
 # Author: Kayden Moreno
 # AndrewID: kmoreno
@@ -25,6 +25,8 @@ def appStarted(app):
     app.conRooms = set()
     app.connectionsNotToRemove = set()
     app.openSquaresNotToRemove = dict()
+    app.connectionsToDraw = []
+    app.tilesToDraw = set()
     app.maxRoomSize = 10
     app.numRooms = 7
     app.menuMargin = app.width // 4
@@ -52,21 +54,25 @@ def appStarted(app):
     app.enemies = {Enemy(25, 25)}
     app.enemyLocs = set()
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
+    #Intial Dungeon Generation
     app.roomList, app.openSquares = createDungeon(app)
     connectRooms(app)
     app.oldConns = copy.deepcopy(app.connections)
     app.oldOpenSquares = copy.deepcopy(app.openSquares)
     delRooms(app)
     removeConns(app)
-    while len(app.connections) < 20:
+    #Change values in loop to specify number of rooms there will be
+    while len(app.connections) != 32:
         app.conRooms = set()
         app.connectionsNotToRemove = set()
         app.openSquaresNotToRemove = dict()
         app.connections = set()
+        app.connectCounter = 0
         app.openSquares = copy.deepcopy(app.oldOpenSquares)
         connectRooms(app)
         delRooms(app)
         removeConns(app)
+    createConnCoords(app)
 
 def timerFired(app):
     if app.currPage == "credit":
