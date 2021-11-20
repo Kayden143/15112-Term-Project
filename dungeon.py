@@ -72,28 +72,28 @@ def connectRooms(app):
         app.connectedCells[room] = {room}
     while len(app.connectedCells) > 1:
         breakLoop = False
-        print(app.connectedCells)
-        print(app.connections)
+        # print(app.connectedCells)
+        # print(app.connections)
         currCell = rm.sample(sorted(app.connectedCells), 1)
         currCellNum = currCell[0]
         currCell = app.connectedCells[currCell[0]]
-        print(currCell)
+        #print(currCell)
         currRoom = rm.sample(currCell, 1)[0]
         randValues = [currRoom + 1, currRoom - 1, currRoom + app.numRooms, currRoom - app.numRooms]
         for val in randValues:
             if (val < 0 or val > app.numRooms**2 or val in currCell or tuple([currRoom, val]) in app.connections or 
             tuple([val, currRoom]) in app.connections or abs(currRoom % app.numRooms - val % app.numRooms) == app.numRooms - 1):
-                print(currRoom, val)
-                print(app.connections)
+                # print(currRoom, val)
+                # print(app.connections)
                 randValues.remove(val)
-        print(currRoom)
-        print(randValues)
+        # print(currRoom)
+        # print(randValues)
         while len(randValues) != 0:
             cRoom = rm.randint(0, len(randValues) - 1)
             for cell in app.connectedCells:
                 if randValues[cRoom] in app.connectedCells[cell] :
                     app.connections.add(tuple([currRoom, randValues[cRoom]]))
-                    print(currCell, cell)
+                    # print(currCell, cell)
                     app.connectedCells[currCellNum] = app.connectedCells[currCellNum].union(app.connectedCells[cell])
                     app.connectedCells.pop(cell)
                     breakLoop = True
@@ -102,12 +102,13 @@ def connectRooms(app):
                 break
             randValues.pop(cRoom)
         app.connectCounter += 1
-        if app.connectCounter >= 200:
+        if app.connectCounter >= 300:
             break
     for con in app.connections:
         if (abs(con[0] % app.numRooms - con[1] % app.numRooms) == app.numRooms - 1 or
         (con[1], con[0]) in app.connections):
             fail = True
+            break
     if len(app.connections) < app.numRooms**2 - 1 or fail:
         app.connections = set()
         app.connectCounter = 0
@@ -115,6 +116,27 @@ def connectRooms(app):
         connectRooms(app)
     else:
         print(app.connections)
+
+def delRooms(app, starRoom = None):
+    if starRoom == None:
+        starRoom = rm.randint(0, app.numRooms**2 - 1)
+    if starRoom in app.conRooms:
+        print(app.connections)
+        return
+    else:
+        app.conRooms.add(starRoom)
+        app.openSquaresNotToRemove[starRoom] = app.openSquares[starRoom]
+        for con in app.connections:
+            if starRoom == con[0]:
+                app.connectionsNotToRemove.add(con)
+                delRooms(app, con[1])
+            elif starRoom == con[1]:
+                app.connectionsNotToRemove.add(con)
+                delRooms(app, con[0])
+
+def removeConns(app):
+    app.connections = copy.deepcopy(app.connectionsNotToRemove)
+    app.openSquares = copy.deepcopy(app.openSquaresNotToRemove)
 
 
 
@@ -147,12 +169,12 @@ def drawConnections(app, canvas):
 def drawRooms(app, canvas):
     tileNumX = 0
     tileNumY = 0
-    for i in range(app.maxRoomSize):
-        for j in range(app.maxRoomSize):
-            canvas.create_rectangle(app.size * i, app.size * j, 
-        app.size * (i + 1), app.size * (j + 1), fill = "gray")
-            canvas.create_rectangle(app.size * (i + 10), app.size * j, 
-            app.size * (i + 11), app.size * (j + 1), fill = "gray")
+    # for i in range(app.maxRoomSize):
+    #     for j in range(app.maxRoomSize):
+    #         canvas.create_rectangle(app.size * i, app.size * j, 
+    #     app.size * (i + 1), app.size * (j + 1), fill = "gray")
+    #         canvas.create_rectangle(app.size * (i + 10), app.size * j, 
+    #         app.size * (i + 11), app.size * (j + 1), fill = "gray")
     for open in app.openSquares:
         for tile in app.openSquares[open]:
             tileNumX = tile % app.maxRoomSize

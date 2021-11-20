@@ -22,8 +22,11 @@ def appStarted(app):
     app.connectCounter = 0
     app.connectedCells = dict()
     app.connections = set()
+    app.conRooms = set()
+    app.connectionsNotToRemove = set()
+    app.openSquaresNotToRemove = dict()
     app.maxRoomSize = 10
-    app.numRooms = 6
+    app.numRooms = 7
     app.menuMargin = app.width // 4
     app.pauseMargin = app.menuMargin // 3
     app.pause = False
@@ -44,14 +47,26 @@ def appStarted(app):
     app.turnCounter = 0
     app.playerTurn = True
     app.enemyTurn = False
-    app.size = 20
+    app.size = 8
     app.p1 = Player()
     app.enemies = {Enemy(25, 25)}
     app.enemyLocs = set()
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
     app.roomList, app.openSquares = createDungeon(app)
     connectRooms(app)
-    print("running")
+    app.oldConns = copy.deepcopy(app.connections)
+    app.oldOpenSquares = copy.deepcopy(app.openSquares)
+    delRooms(app)
+    removeConns(app)
+    while len(app.connections) < 20:
+        app.conRooms = set()
+        app.connectionsNotToRemove = set()
+        app.openSquaresNotToRemove = dict()
+        app.connections = set()
+        app.openSquares = copy.deepcopy(app.oldOpenSquares)
+        connectRooms(app)
+        delRooms(app)
+        removeConns(app)
 
 def timerFired(app):
     if app.currPage == "credit":
