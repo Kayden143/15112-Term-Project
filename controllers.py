@@ -59,16 +59,16 @@ def mouseMoved(app, event):
             app.pauseHelpColor, app.pauseQuitColor, app.pauseBackColor = "gray", "gray", "gray"
 
 def keyPressed(app, event):
-    if event.key == "Escape" and app.currPage == "game" and not app.pause:
-        app.pause = True
-    elif event.key == "Escape" and app.currPage == "game" and app.pause:
-        app.pause = False
-    elif event.key == "Escape":
-        app.currPage = "intro"
-    if app.gameOver or not app.playerTurn:
-        return
-    if event.key in {"h", "w", "Right", "Left", "Up", "Down"}:
-        app.playerTurn = False
+    # if event.key == "Escape" and app.currPage == "game" and not app.pause:
+    #     app.pause = True
+    # elif event.key == "Escape" and app.currPage == "game" and app.pause:
+    #     app.pause = False
+    # elif event.key == "Escape":
+    #     app.currPage = "intro"
+    # if app.gameOver or not app.playerTurn:
+    #     return
+    # if event.key in {"h", "w", "Right", "Left", "Up", "Down"}:
+    #     app.playerTurn = False
     if event.key == "h":
         app.playerTurn = True
         if "health" in app.potionList:

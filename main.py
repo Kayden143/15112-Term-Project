@@ -25,6 +25,7 @@ def appStarted(app):
     app.conRooms = set()
     app.connectionsNotToRemove = set()
     app.openSquaresNotToRemove = dict()
+    app.openConnections = dict()
     app.connectionsToDraw = []
     app.tilesToDraw = set()
     app.maxRoomSize = 10
@@ -62,7 +63,7 @@ def appStarted(app):
     delRooms(app)
     removeConns(app)
     #Change values in loop to specify number of rooms there will be
-    while len(app.connections) != 32:
+    while len(app.connections) != 30:
         app.conRooms = set()
         app.connectionsNotToRemove = set()
         app.openSquaresNotToRemove = dict()
@@ -73,6 +74,8 @@ def appStarted(app):
         delRooms(app)
         removeConns(app)
     createConnCoords(app)
+    print(app.openConnections)
+    playerStart(app)
 
 def timerFired(app):
     if app.currPage == "credit":
@@ -105,7 +108,6 @@ def displayCurrentPage(app, canvas):
                 drawPauseButtons(app, canvas)
             return
         drawDungeon(app, canvas)
-        drawPlayer(app, canvas)
         drawEnemies(app, canvas)
         drawHealthBar(app, canvas)
         if app.pause:
@@ -114,6 +116,7 @@ def displayCurrentPage(app, canvas):
     elif app.currPage == "credit":
         drawRooms(app, canvas)
         drawConnections(app, canvas)
+        drawPlayer(app, canvas)
 
 def redrawAll(app, canvas):
     displayCurrentPage(app, canvas)
