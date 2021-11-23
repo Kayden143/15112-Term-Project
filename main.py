@@ -50,7 +50,7 @@ def appStarted(app):
     app.turnCounter = 0
     app.playerTurn = True
     app.enemyTurn = False
-    app.size = 8
+    app.size = app.width // app.maxRoomSize
     app.p1 = Player()
     app.enemies = {Enemy(25, 25)}
     app.enemyLocs = set()
@@ -87,14 +87,11 @@ def timerFired(app):
     if app.gameOver:
         return
     if app.enemyTurn:
-        print(app.p1.health)
         app.enemyLocs = set()
         for enemy in app.enemies:
             app.enemyLocs.add(tuple([enemy.x, enemy.y]))
         moveEnemy(app)
         app.playerTurn, app.enemyTurn = True, False
-        app.turnCounter += 1
-        createEnemy(app)
 
 def displayCurrentPage(app, canvas):
     if app.currPage == "intro":
@@ -114,7 +111,8 @@ def displayCurrentPage(app, canvas):
             drawPauseMenu(app, canvas)
             drawPauseButtons(app, canvas)
     elif app.currPage == "credit":
-        drawRooms(app, canvas)
+        #drawRooms(app, canvas)
+        drawCurrentCell(app, canvas)
         drawConnections(app, canvas)
         drawPlayer(app, canvas)
 

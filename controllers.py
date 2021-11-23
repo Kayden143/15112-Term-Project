@@ -15,17 +15,16 @@ def mousePressed(app, event):
     if app.currPage == "intro":
         if event.x >= app.width // 2 - app.buttonWidth and event.x <= app.width // 2 + app.buttonWidth:
             if event.y >= app.height // 2 - app.buttonHeight and event.y <= app.height // 2 + app.buttonHeight:
-                print("Help selected")
+                pass
             elif event.y >= app.height // 2 - app.buttonHeight + app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight + app.buttonMargin:
-                print("Credit selected")
-                app.currPage = "credit"
-            elif event.y >= app.height // 2 - app.buttonHeight - app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight - app.buttonMargin:
                 app.currPage = "game"
+            elif event.y >= app.height // 2 - app.buttonHeight - app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight - app.buttonMargin:
+                app.currPage = "credit"
                 app.pause = False
     elif app.currPage == "game" and app.pause:
         if event.x >= app.width // 2 - app.buttonWidth and event.x <= app.width // 2 + app.buttonWidth:
             if event.y >= app.height // 2 - app.buttonHeight and event.y <= app.height // 2 + app.buttonHeight:
-                print("Pause Help Selected")
+                pass
             elif event.y >= app.height // 2 - app.buttonHeight + app.buttonMargin and event.y <= app.height // 2 + app.buttonHeight + app.buttonMargin:
                 app.pause = False
                 app.currPage = "intro"

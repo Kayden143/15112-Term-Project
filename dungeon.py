@@ -118,10 +118,10 @@ def createConnCoords(app):
         if conDir == 1:
             tileX = conTile % app.maxRoomSize
             tileY = conTile // app.maxRoomSize
-            for i in range(conTile % app.maxRoomSize + app.maxRoomSize - conTile % app.maxRoomSize):
-                if conTile + i * app.maxRoomSize < app.maxRoomSize ** 2:
+            for i in range(app.maxRoomSize):
+                if conTile + i < app.maxRoomSize ** 2 and (conTile + i) // app.maxRoomSize == tileY:
                     app.openConnections[min(con[0], con[1])].add(conTile + i)
-                if conTile - i * app.maxRoomSize > 0:
+                if conTile - i > 0 and (conTile - i) // app.maxRoomSize == tileY:
                     app.openConnections[max(con[0], con[1])].add(conTile - i)
             for i in range(conTile % app.maxRoomSize + app.maxRoomSize - conTile % app.maxRoomSize):
                 app.connectionsToDraw.append(tuple([app.size * (tileX + i + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
@@ -131,7 +131,7 @@ def createConnCoords(app):
         else:
             tileX = conTile % app.maxRoomSize
             tileY = conTile // app.maxRoomSize
-            for i in range(conTile % app.maxRoomSize + app.maxRoomSize - conTile % app.maxRoomSize):
+            for i in range(conTile % app.maxRoomSize + app.maxRoomSize):
                 if conTile + i * app.maxRoomSize < app.maxRoomSize ** 2:
                     app.openConnections[min(con[0], con[1])].add(conTile + i * app.maxRoomSize)
                 if conTile - i * app.maxRoomSize > 0:
@@ -142,26 +142,44 @@ def createConnCoords(app):
                 app.size * (tileX + 1 + app.maxRoomSize * (min(con[0], con[1]) % app.numRooms)), 
                 app.size * (tileY + 1 + i + app.maxRoomSize * (min(con[0], con[1]) // app.numRooms))]))
 
-def drawConnections(app, canvas):
-    for tile in app.connectionsToDraw:
-        canvas.create_rectangle(tile[0], tile[1], tile[2], tile[3], fill = "purple")
+# def drawConnections(app, canvas):
+#     for tile in app.connectionsToDraw:
+#         canvas.create_rectangle(tile[0], tile[1], tile[2], tile[3], fill = "orange")
 
-def drawRooms(app, canvas):
-    tileNumX = 0
-    tileNumY = 0
-    for open in app.openSquares:
-        for tile in app.openSquares[open]:
-            tileNumX = tile % app.maxRoomSize
-            tileNumY = tile // app.maxRoomSize
-            canvas.create_rectangle(app.size * (tileNumX + app.maxRoomSize * (open % app.numRooms)), 
-            app.size * (tileNumY + app.maxRoomSize * (open // app.numRooms)), 
-            app.size * (tileNumX + 1 + app.maxRoomSize * (open % app.numRooms)), 
-            app.size * (tileNumY + 1 + app.maxRoomSize * (open // app.numRooms)), fill = "orange")
-            if open == app.p1.currCell:
-                canvas.create_rectangle(app.size * (tileNumX + app.maxRoomSize * (open % app.numRooms)), 
-                app.size * (tileNumY + app.maxRoomSize * (open // app.numRooms)), 
-                app.size * (tileNumX + 1 + app.maxRoomSize * (open % app.numRooms)), 
-                app.size * (tileNumY + 1 + app.maxRoomSize * (open // app.numRooms)), fill = "blue")
+def drawConnections(app, canvas):
+    for tile in app.openConnections[app.p1.currCell]:
+        tileNumX = tile % app.maxRoomSize
+        tileNumY = tile // app.maxRoomSize
+        canvas.create_rectangle(app.size * tileNumX, 
+        app.size * tileNumY, 
+        app.size * (tileNumX + 1), 
+        app.size * (tileNumY + 1), fill = "orange")
+
+# def drawRooms(app, canvas):
+#     tileNumX = 0
+#     tileNumY = 0
+#     for open in app.openSquares:
+#         for tile in app.openSquares[open]:
+#             tileNumX = tile % app.maxRoomSize
+#             tileNumY = tile // app.maxRoomSize
+#             canvas.create_rectangle(app.size * (tileNumX + app.maxRoomSize * (open % app.numRooms)), 
+#             app.size * (tileNumY + app.maxRoomSize * (open // app.numRooms)), 
+#             app.size * (tileNumX + 1 + app.maxRoomSize * (open % app.numRooms)), 
+#             app.size * (tileNumY + 1 + app.maxRoomSize * (open // app.numRooms)), fill = "orange")
+#             if open == app.p1.currCell:
+#                 canvas.create_rectangle(app.size * (tileNumX + app.maxRoomSize * (open % app.numRooms)), 
+#                 app.size * (tileNumY + app.maxRoomSize * (open // app.numRooms)), 
+#                 app.size * (tileNumX + 1 + app.maxRoomSize * (open % app.numRooms)), 
+#                 app.size * (tileNumY + 1 + app.maxRoomSize * (open // app.numRooms)), fill = "blue")
 
 def drawCurrentCell(app, canvas):
-    pass
+    tileNumX = 0
+    tileNumY = 0
+    for tile in app.openSquares[app.p1.currCell]:
+        tileNumX = tile % app.maxRoomSize
+        tileNumY = tile // app.maxRoomSize
+        canvas.create_rectangle(app.size * tileNumX, 
+        app.size * tileNumY, 
+        app.size * (tileNumX + 1), 
+        app.size * (tileNumY + 1), fill = "orange")
+
