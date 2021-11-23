@@ -18,6 +18,9 @@ from introPage import *
 from controllers import *
 
 def appStarted(app):
+    app.goalCell = 0
+    app.goalTile = 0
+    app.depth = 1
     app.newCon = True
     app.connectCounter = 0
     app.connectedCells = dict()
@@ -44,7 +47,6 @@ def appStarted(app):
     app.potionList = dict()
     health = healthPotion()
     app.potionList["health"] = health
-    print(app.potionList)
     app.wallList = set()
     app.gameOver = False
     app.turnCounter = 0
@@ -52,7 +54,7 @@ def appStarted(app):
     app.enemyTurn = False
     app.size = app.width // app.maxRoomSize
     app.p1 = Player()
-    app.enemies = {Enemy(25, 25)}
+    app.enemies = {Enemy(5), Enemy(5), Enemy(5)}
     app.enemyLocs = set()
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
     #Intial Dungeon Generation
@@ -63,7 +65,7 @@ def appStarted(app):
     delRooms(app)
     removeConns(app)
     #Change values in loop to specify number of rooms there will be
-    while len(app.connections) != 30:
+    while len(app.connections) != 20 + app.depth:
         app.conRooms = set()
         app.connectionsNotToRemove = set()
         app.openSquaresNotToRemove = dict()
@@ -74,22 +76,23 @@ def appStarted(app):
         delRooms(app)
         removeConns(app)
     createConnCoords(app)
-    print(app.openConnections)
     playerStart(app)
+    assignGoal(app)
+    app.itemLocs = dict()
+    createItems(app)
+    for enemy in app.enemies:
+        assignEnemy(app, enemy)
+        print(enemy.currCell)
 
 def timerFired(app):
     if app.currPage == "credit":
         app.newCon = False
-    if app.currPage != "game" or app.pause:
+    if app.currPage != "credit" or app.pause:
         return
-    createRoom(app, 8, 6, 13, 5)
-    createRoom(app, 10, 10, 12, 12)
     if app.gameOver:
         return
     if app.enemyTurn:
-        app.enemyLocs = set()
-        for enemy in app.enemies:
-            app.enemyLocs.add(tuple([enemy.x, enemy.y]))
+        print("enemy moving")
         moveEnemy(app)
         app.playerTurn, app.enemyTurn = True, False
 
@@ -97,24 +100,24 @@ def displayCurrentPage(app, canvas):
     if app.currPage == "intro":
         drawBackground(app, canvas)
         drawIntroButtons(app, canvas)
-    elif app.currPage == "game":
+    elif app.currPage == "credit":
         if app.gameOver:
             canvas.create_text(app.width // 2, app.height // 2, text = "GAME OVER", anchor = "center")
             if app.pause:
                 drawPauseMenu(app, canvas)
                 drawPauseButtons(app, canvas)
             return
-        drawDungeon(app, canvas)
-        drawEnemies(app, canvas)
-        drawHealthBar(app, canvas)
-        if app.pause:
-            drawPauseMenu(app, canvas)
-            drawPauseButtons(app, canvas)
-    elif app.currPage == "credit":
-        #drawRooms(app, canvas)
+        canvas.create_rectangle(0, 0, app.width, app.height, fill = "gray")
         drawCurrentCell(app, canvas)
         drawConnections(app, canvas)
         drawPlayer(app, canvas)
+        drawHealthBar(app, canvas)
+        drawEnemies(app, canvas)
+        drawGoal(app, canvas)
+        drawItems(app, canvas)
+        if app.pause:
+            drawPauseMenu(app, canvas)
+            drawPauseButtons(app, canvas)
 
 def redrawAll(app, canvas):
     displayCurrentPage(app, canvas)
