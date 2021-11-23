@@ -92,7 +92,6 @@ def timerFired(app):
     if app.gameOver:
         return
     if app.enemyTurn:
-        print("enemy moving")
         moveEnemy(app)
         app.playerTurn, app.enemyTurn = True, False
 

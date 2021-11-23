@@ -99,7 +99,7 @@ def updatePlayerLocation(app, left, right, down, up):
         pass
     else:
         app.p1.currTile = newTile
-        # app.playerTurn, app.enemyTurn = False, True
+        app.playerTurn, app.enemyTurn = False, True
     nTile = fight(app)
     if nTile != None:
         nTile.health -= 5
@@ -143,10 +143,11 @@ def updatePlayerLocation(app, left, right, down, up):
         playerStart(app)
         assignGoal(app)
         createItems(app)
+        app.enemies = set()
         app.enemies = {Enemy(app.depth + 5), Enemy(app.depth + 5), Enemy(app.depth + 5)}
         for enemy in app.enemies:
             assignEnemy(app, enemy)
-            print(enemy.currCell)
+            print(enemy.currCell, enemy.currTile)
     pickupItems(app)
 
 def fight(app):
