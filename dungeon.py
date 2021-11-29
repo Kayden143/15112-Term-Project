@@ -11,9 +11,12 @@ def createRoom(app, l, w, x, y):
             if length == 0 or length == (l - 1) or width == 0  or width == (w - 1):
                 app.wallList.add(tuple([x + length, y + width]))
 
-def drawHealthBar(app, canvas):
+def drawStats(app, canvas):
     canvas.create_rectangle(app.size // 4, app.size // 4, 2 * app.size, app.size // 2, fill = "red")
+    canvas.create_text(2 * app.size + app.size // 4, app.size // 4, text = str(app.p1.health) + "/" + str(app.p1.maxHealth), anchor = "nw")
     canvas.create_rectangle(app.size // 4, app.size // 4, 2 * app.size * (app.p1.health / app.p1.maxHealth), app.size // 2, fill = "yellow")
+    canvas.create_text(app.size // 4, app.size / 1.8, text = "Current depth: " + str(app.depth), anchor = "nw")
+    canvas.create_text(app.size // 4, app.size * 0.8, text = "EXP Level: " + str(app.expLevel) + "   EXP to next level: " + str(app.expToNextLevel), anchor = "nw")
 
 def drawDungeon(app, canvas):
     for row in range(len(app.grid)):

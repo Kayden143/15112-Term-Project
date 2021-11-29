@@ -11,13 +11,15 @@ from dungeon import *
 
 class Player():
     def __init__ (self):
-        self.maxHealth = 40
-        self.damage = 5
         self.health = 40
         self.x = 0
         self.y = 0
         self.currCell = 0
         self.currTile = 0
+        self.level = 1
+        self.maxHealth = self.level * 5 + 35
+        self.damage = 3 + self.level * 2
+        self.exp = 0
     
     def __repr__ (self):
         return f'{self.x, self.y}' + "health" + f'self.health'
@@ -74,7 +76,6 @@ def isLegalMove(app, tile, dir):
         return None
 
 def updatePlayerLocation(app, left, right, down, up):
-    print(app.p1.currCell)
     app.playerTurn, app.enemyTurn = False, True
     oldTile = app.p1.currTile
     oldCell = app.p1.currCell
@@ -102,13 +103,24 @@ def updatePlayerLocation(app, left, right, down, up):
         app.playerTurn, app.enemyTurn = False, True
     nTile = fight(app)
     if nTile != None:
-        nTile.health -= 5
+        nTile.health -= app.p1.damage
         if nTile.health <= 0:
             app.enemies.remove(nTile)
+            app.p1.exp += 5
+            print(app.p1.exp)
+            if app.p1.exp >= 10 * app.p1.level:
+                app.p1.maxHealth += 10
+                app.p1.damage += 1
+                app.p1.exp = 0
+                app.p1.level += 1
+                app.expLevel = app.p1.level
+            app.expToNextLevel = 10 * app.p1.level - app.p1.exp
             app.playerTurn, app.enemyTurn = False, True
         app.p1.currCell, app.p1.currTile = oldCell, oldTile
+    app.inFight = nTile
     if app.p1.currCell == app.goalCell and app.p1.currTile == app.goalTile:
         print("Won!!!!!")
+        app.itemLocs = dict()
         app.depth += 1
         app.goalCell = 0
         app.goalTile = 0
@@ -143,8 +155,8 @@ def updatePlayerLocation(app, left, right, down, up):
         playerStart(app)
         assignGoal(app)
         createItems(app)
-        app.enemies = set()
-        app.enemies = {Enemy(app.depth + 5), Enemy(app.depth + 5), Enemy(app.depth + 5)}
+        app.enemies = list()
+        app.enemies = [Enemy(app.depth + 5), Enemy(app.depth + 5), Enemy(app.depth + 5)]
         for enemy in app.enemies:
             assignEnemy(app, enemy)
             print(enemy.currCell, enemy.currTile)

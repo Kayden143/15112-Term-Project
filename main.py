@@ -10,6 +10,7 @@ from cmu_112_graphics import *
 import sys
 from PIL import Image, ImageTk
 from enemy import *
+from help import drawInstructions
 from pauseMenu import *
 from player import *
 from dungeon import *
@@ -18,6 +19,9 @@ from introPage import *
 from controllers import *
 
 def appStarted(app):
+    app.inFight = None
+    app.expLevel = 1
+    app.expToNextLevel = 10 * app.expLevel
     app.goalCell = 0
     app.goalTile = 0
     app.depth = 1
@@ -54,8 +58,8 @@ def appStarted(app):
     app.enemyTurn = False
     app.size = app.width // app.maxRoomSize
     app.p1 = Player()
-    app.enemies = {Enemy(5), Enemy(5), Enemy(5)}
-    app.enemyLocs = set()
+    app.enemies = [Enemy(5), Enemy(5), Enemy(5)]
+    app.turnCounter = 0
     app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
     #Intial Dungeon Generation
     app.roomList, app.openSquares = createDungeon(app)
@@ -82,7 +86,6 @@ def appStarted(app):
     createItems(app)
     for enemy in app.enemies:
         assignEnemy(app, enemy)
-        print(enemy.currCell)
 
 def timerFired(app):
     if app.currPage == "credit":
@@ -92,6 +95,10 @@ def timerFired(app):
     if app.gameOver:
         return
     if app.enemyTurn:
+        app.turnCounter += 1
+        if app.turnCounter % 35 == 0:
+            app.enemies.append(Enemy(app.depth + 5))
+            assignEnemy(app, app.enemies[-1])
         moveEnemy(app)
         app.playerTurn, app.enemyTurn = True, False
 
@@ -110,13 +117,17 @@ def displayCurrentPage(app, canvas):
         drawCurrentCell(app, canvas)
         drawConnections(app, canvas)
         drawPlayer(app, canvas)
-        drawHealthBar(app, canvas)
+        drawStats(app, canvas)
         drawEnemies(app, canvas)
         drawGoal(app, canvas)
         drawItems(app, canvas)
+        if app.inFight != None: 
+            drawEnemyHealth(app, canvas)
         if app.pause:
             drawPauseMenu(app, canvas)
             drawPauseButtons(app, canvas)
+    elif app.currPage == "help":
+        drawInstructions(app, canvas)
 
 def redrawAll(app, canvas):
     displayCurrentPage(app, canvas)
