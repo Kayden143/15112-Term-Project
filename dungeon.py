@@ -17,6 +17,7 @@ def drawStats(app, canvas):
     canvas.create_rectangle(app.size // 4, app.size // 4, 2 * app.size * (app.p1.health / app.p1.maxHealth), app.size // 2, fill = "yellow")
     canvas.create_text(app.size // 4, app.size / 1.8, text = "Current depth: " + str(app.depth), anchor = "nw")
     canvas.create_text(app.size // 4, app.size * 0.8, text = "EXP Level: " + str(app.expLevel) + "   EXP to next level: " + str(app.expToNextLevel), anchor = "nw")
+    canvas.create_text(app.size // 4, app.size * 1.05, text = "Potions Remaining: " + str(app.potionList["health"].number), anchor = "nw")
 
 def drawDungeon(app, canvas):
     for row in range(len(app.grid)):

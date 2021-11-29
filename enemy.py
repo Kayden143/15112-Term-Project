@@ -68,7 +68,7 @@ def findCellPathToPlayer(app, enemy, startCell = None, path = None, usedConns = 
     if startCell == app.p1.currCell:
         return path
     else:
-        for con in app.connections:
+        for con in sorted(list(app.connections)):
             if con in usedConns:
                 continue
             elif startCell == con[0]:

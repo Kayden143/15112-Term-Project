@@ -60,7 +60,6 @@ def appStarted(app):
     app.p1 = Player()
     app.enemies = [Enemy(5), Enemy(5), Enemy(5)]
     app.turnCounter = 0
-    app.grid = [(["grey"] * (app.width // app.size)) for i in range(app.height // app.size)]
     #Intial Dungeon Generation
     app.roomList, app.openSquares = createDungeon(app)
     connectRooms(app)
