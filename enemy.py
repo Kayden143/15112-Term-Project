@@ -68,23 +68,42 @@ def findCellPathToPlayer(app, enemy, startCell = None, path = None, usedConns = 
     if startCell == app.p1.currCell:
         return path
     else:
-        for con in sorted(list(app.connections)):
-            if con in usedConns:
-                continue
-            elif startCell == con[0]:
-                path.append(con[1])
-                usedConns.add(con)
-                sol = findCellPathToPlayer(app, enemy, con[1], path, usedConns)
-                if sol != None:
-                    return sol
-                path.pop()
-            elif startCell == con[1]:
-                path.append(con[0])
-                usedConns.add(con)
-                sol = findCellPathToPlayer(app, enemy, con[0], path, usedConns)
-                if sol != None:
-                    return sol
-                path.pop()
+        if app.p1.currCell < app.numRooms**2 // 2:
+            for con in sorted(list(app.connections)):
+                if con in usedConns:
+                    continue
+                elif startCell == con[0]:
+                    path.append(con[1])
+                    usedConns.add(con)
+                    sol = findCellPathToPlayer(app, enemy, con[1], path, usedConns)
+                    if sol != None:
+                        return sol
+                    path.pop()
+                elif startCell == con[1]:
+                    path.append(con[0])
+                    usedConns.add(con)
+                    sol = findCellPathToPlayer(app, enemy, con[0], path, usedConns)
+                    if sol != None:
+                        return sol
+                    path.pop()
+        else:
+            for con in reversed(sorted(list(app.connections))):
+                if con in usedConns:
+                    continue
+                elif startCell == con[0]:
+                    path.append(con[1])
+                    usedConns.add(con)
+                    sol = findCellPathToPlayer(app, enemy, con[1], path, usedConns)
+                    if sol != None:
+                        return sol
+                    path.pop()
+                elif startCell == con[1]:
+                    path.append(con[0])
+                    usedConns.add(con)
+                    sol = findCellPathToPlayer(app, enemy, con[0], path, usedConns)
+                    if sol != None:
+                        return sol
+                    path.pop()
         return None
 
 def moveEnemyOffScreen(app, enemy, target):

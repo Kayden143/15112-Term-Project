@@ -10,7 +10,7 @@ from cmu_112_graphics import *
 import sys
 from PIL import Image, ImageTk
 from enemy import *
-from help import drawInstructions
+from help import *
 from pauseMenu import *
 from player import *
 from dungeon import *
@@ -95,7 +95,7 @@ def timerFired(app):
         return
     if app.enemyTurn:
         app.turnCounter += 1
-        if app.turnCounter % 35 == 0:
+        if app.turnCounter % 45 == 0:
             app.enemies.append(Enemy(app.depth + 5))
             assignEnemy(app, app.enemies[-1])
         moveEnemy(app)
