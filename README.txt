@@ -1,20 +1,9 @@
-This is the final term project for 15112 fall semester 2021
-------------------------------------------
-Author: Kayden Moreno
+Name: 112geon
 
-Date Initialized: 11/2/201
+Description: A dungeon crawler/roguelike with procedurally generated levels, enemy AI, items, and combat.
 
-Controls for TP2:
+How to Run: The Git repository/uploaded files should contain everything needed to run the program. Just select the main.py file and run it after downloading to start the game.
 
--Arrow Keys for Movement
--w to skip a turn
--h to heal (start with 2 heals per round collecting black cubes increase health potion count by one)
--attack by moving into an enemy (red cube)
--esc to pause the game
+Libraries Used: None
 
-Goal:
-
--Reach the purple tile to generate a new level with more rooms and stronger enemies
-
-Notes:
--Help and credit pages not built yet, see credit file for citations
+Shortcut Commands: None (not necessary)
