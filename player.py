@@ -7,6 +7,7 @@ from enemy import *
 from items import *
 from dungeon import *
 
+#This file contans code for the player and the various actions a user can take
 
 
 class Player():

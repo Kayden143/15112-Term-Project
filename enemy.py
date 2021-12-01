@@ -7,6 +7,7 @@ from time import sleep
 
 from items import drawItems
 
+#This deals with enemy stats and movement/tracking towards the player
 
 class Enemy():
     def __init__(self, damage):

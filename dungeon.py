@@ -4,6 +4,7 @@ from typing import Union
 from cmu_112_graphics import *
 import sys
 from PIL import Image
+#This draws and procedurally generates the dungeon
 
 
 def drawStats(app, canvas):
