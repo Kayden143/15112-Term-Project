@@ -2,6 +2,7 @@
 # Date Initialized: 11/2/21
 # Author: Kayden Moreno
 # AndrewID: kmoreno
+#This file is the driver file tha runs the code written elsewhere and initializes most of the starting variables
 
 import tkinter as tk
 import math
@@ -17,6 +18,7 @@ from dungeon import *
 from items import *
 from introPage import *
 from controllers import *
+from credits import *
 
 def appStarted(app):
     app.inFight = None
@@ -127,7 +129,8 @@ def displayCurrentPage(app, canvas):
             drawPauseButtons(app, canvas)
     elif app.currPage == "help":
         drawInstructions(app, canvas)
-
+    elif app.currPage == "game":
+        drawCredits(app, canvas)
 def redrawAll(app, canvas):
     displayCurrentPage(app, canvas)
 

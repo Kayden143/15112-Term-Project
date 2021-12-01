@@ -11,6 +11,8 @@ from dungeon import *
 from items import *
 from introPage import *
 
+#This contains the code for user inputs i.e. mouse/keys
+
 def mousePressed(app, event):
     if app.currPage == "intro":
         if event.x >= app.width // 2 - app.buttonWidth and event.x <= app.width // 2 + app.buttonWidth:

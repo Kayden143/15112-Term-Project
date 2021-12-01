@@ -4,6 +4,8 @@ from cmu_112_graphics import *
 import sys
 from PIL import Image
 
+#This contains the code for collecting and using items
+
 class Potion():
     def __init__(self, type, color, number):
         self.type = type

@@ -4,6 +4,8 @@ from cmu_112_graphics import *
 import sys
 from PIL import Image
 
+#This sets up the intro page UI
+
 
 def drawBackground(app, canvas):
     canvas.create_image(app.width // 2, app.height // 2, image = app.titleImg)

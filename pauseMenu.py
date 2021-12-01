@@ -4,6 +4,7 @@ import random as rm
 from cmu_112_graphics import *
 import sys
 from PIL import Image, ImageTk
+#This is the code for the pause menu/buttons
 
 def drawPauseMenu(app, canvas):
     canvas.create_rectangle(app.width // 2 - app.menuMargin, app.height // 2 - app.menuMargin, app.width // 2 + app.menuMargin, 
